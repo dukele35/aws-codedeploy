@@ -204,3 +204,47 @@ Created in Step 1
 - Github token name: --> follow this [link](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 - Then connect to github 
 - Important [doc](https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-partners-github.html) - Integrating CodeDeploy w/ Github.
+
+# 5. Required scripts in target repo
+#### `./scripts/run.sh`
+```
+#!/bin/bash
+cp /home/ec2-user/opply-app/.env /home/ec2-user/app
+cp /home/ec2-user/opply-app/opply-ui/.env /home/ec2-user/app/opply-ui
+cp -R /home/ec2-user/opply-app/models /home/ec2-user/app/
+cd /home/ec2-user/app
+docker-compose build --no-cache
+docker-compose up -d
+docker system prune -a -f
+```
+#### `./scripts/setup.sh`
+```
+#!/bin/bash
+sudo amazon-linux-extras install docker -y
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+sudo chmod 666 /var/run/docker.sock
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+sudo service docker start
+```
+#### `./appspec.yml`
+```
+version: 0.0
+os: linux
+files:
+ - source: .
+   destination: /home/ec2-user/app
+hooks:
+  AfterInstall:
+   - location: scripts/setup.sh
+     timeout: 300
+     runas: root
+  ApplicationStart:
+   - location: scripts/run.sh
+     timeout: 1200
+     runas: root
+```
+
+`After this, you could start pushing code commits with automated EC2 server`
