@@ -154,3 +154,53 @@ or
 ```
 systemctl status codedeploy-agent
 ```
+
+# 4. AWS Setup CodeDeploy
+### 4.1. Creating 02 IAM Roles
+#### Role no.1 - InstanceRole
+- use case: EC2
+- permission: AmazonEC2RoleforAWSCodeDeploy
+- name the role: InstanceRole
+#### Role no.2 - CodeDeployRole
+- use case: EC2
+- permission: AWSCodeDeployRole, AmazonEC2FullAccess, AWSCodeDeployFullAccess, AdministratorAccess
+- name the role: CodeDeployRole
+- after creating the role, edit Trust Relationship as follows:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "codedeploy.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```
+### 4.2. Update EC2 
+Created in Step 1
+- edit IAM role to be Role no.1 - InstanceRole (Step 4.1) 
+- add tags --> EC2-CodeDeploy:latest
+
+### 4.3. Setup AWS CodeDeploy
+#### 4.3.1. Create Application
+- Application name: CodeDeployApplication
+- Compute Platform: EC2/On-premise
+#### 4.3.2. Create Deployment Group
+- Group name: CodeDeployGroup
+- Service role: Role no.2 - CodeDeployRole (Step 4.1)
+- Deployment type: in-place 
+- Environment configuration: Amazon EC2 instane // tag group: EC2-CodeDeploy:latest (Step 4.2)
+- Install AWS CodeDeploy Agent: Now & Schedule Updates 
+- Deployment settings: CodeDeployDefault.OneAtATime
+- Load balancer: no choice
+#### 4.3.3. Create Deployment
+- This step is to verify and link between github & codedeploy
+- Deployment group: CodeDeployGroup (Step 4.3.2)
+- Revision type: My application is stored in Github
+- Github token name: --> follow this [link](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- Then connect to github 
+- Important [doc](https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-partners-github.html) - Integrating CodeDeploy w/ Github.
