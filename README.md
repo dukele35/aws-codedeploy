@@ -87,8 +87,6 @@ ssh-keygen -t rsa -b 4096 -C "name@emailaddress.com"
 |+.o .o+ ..       |
 |ooo+o++...       |
 +----[SHA256]-----+
-```
-```
 eval $(ssh-agent -s)
 >>> Agent pid 8367
 ssh-add ~/.ssh/id_rsa
@@ -96,4 +94,40 @@ ssh-add ~/.ssh/id_rsa
 >>> Identity added: /home/ec2-user/.ssh/id_rsa (/home/ec2-user/.ssh/id_rsa)
 vim ~/.ssh/id_rsa.pub
 >>> <copy ssh key>
+```
+
+### 2.7. Using Personal Access Token Git ([link](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token))
+
+### 2.8. Reboot EC2 Again
+```
+sudo reboot
+```
+
+### 2.9. Login AWS
+```
+aws configure
+>>> access key
+>>> secret key
+>>> time zone
+>>> format
+```
+
+### 2.10. Install Conda ([link](https://medium.com/@GalarnykMichael/aws-ec2-part-3-installing-anaconda-on-ec2-linux-ubuntu-dbef0835818a))
+- Go to: https://repo.anaconda.com/archive/ --> to choose a version of conda
+- Example: https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh
+```
+wget https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh
+bash Anaconda3-2022.05-Linux-x86_64.sh
+>> follow instructions
+source .bashrc
+```
+
+### 2.11. Reboot EC2 Again
+```
+sudo reboot
+```
+
+### 2.12. Check EBS persistent volume on EC2
+```
+df -h 
 ```
