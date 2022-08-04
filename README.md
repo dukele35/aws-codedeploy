@@ -1,5 +1,5 @@
 # AWS CodeDeploy
-
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
 # 1. Creating Amazon Linux AWS
 - AMI: Amazon Linux 2 Kernel 5.10 AMI 2.0.20220606.1 x86_64 HVM gp2
 - Instance type: t3.2xlarge
