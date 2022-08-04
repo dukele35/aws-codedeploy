@@ -131,3 +131,26 @@ sudo reboot
 ```
 df -h 
 ```
+
+# 3. Install CodeDeploy Agent on AWS Linux EC2
+- install codedeploy-agent on ec2 ([link](https://dev.to/ankushbehera/a-complete-guide-to-deploy-github-project-on-amazon-ec2-using-github-actions-and-aws-codedeploy-3f0b))
+```
+sudo yum update
+sudo yum install -y ruby
+sudo yum install wget
+```
+- list of packages available ([link](https://docs.aws.amazon.com/codedeploy/latest/userguide/resource-kit.html#resource-kit-bucket-names
+wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install))
+```
+chmod +x ./install
+sudo ./install auto
+sudo service codedeploy-agent start
+```
+- check status of codedeploy-agent
+```
+sudo service codedeploy-agent status
+```
+or
+```
+systemctl status codedeploy-agent
+```
